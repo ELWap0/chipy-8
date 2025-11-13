@@ -114,42 +114,54 @@ class chip8(graphics, audio):
 
         return operation
 
-    @classmethod
-    def get_x(cls, func):
-        x = cls.opcode & 0x0F00 >> 8
+    @staticmethod
+    def get_x(func):
 
         @wraps(func)
         def wrapper(self, *args, **kwargs):
+            x = self.opcode & 0x0F00 >> 8
             return func(self, x, *args, **kwargs)
 
         return wrapper
 
-    @classmethod
-    def get_y(cls, func):
-        y = cls.opcode & 0x00F0 >> 4
+    @staticmethod
+    def get_y(func):
 
         @wraps(func)
         def wrapper(self, *args, **kwargs):
+            y = self.opcode & 0x00F0 >> 4
             return func(self, y, *args, **kwargs)
 
         return wrapper
 
-    @classmethod
-    def get_nnn(cls, func):
-        nnn = cls.opcode & 0x0FFF
-
+    @staticmethod
+    def get_nnn(func):
         @wraps(func)
         def wrapper(self, *args, **kwargs):
+            nnn = self.opcode & 0x0FFF
             return func(self, nnn, *args, **kwargs)
 
         return wrapper
 
-    @classmethod
-    def get_nn(cls, func):
-        nn = cls.opcode & 0x00FF
-
+    @staticmethod
+    def get_nn(func):
         @wraps(func)
         def wrapper(self, *args, **kwargs):
+            nn = self.opcode & 0x00FF
             return func(self, nn, *args, **kwargs)
 
         return wrapper
+
+    @get_nnn
+    def goto(self, nnn):
+        self.pc = nnn
+
+    @get_x
+    @get_nn
+    def eqV(self, x, nn):
+        return nn == self.v[x]
+
+    @get_x
+    @get_nn
+    def neqV(self, x, nn):
+        return nn != self.v[x]
