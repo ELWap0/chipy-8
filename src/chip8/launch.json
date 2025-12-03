@@ -1,0 +1,10 @@
+{
+  "type":"python",
+  "request":"launch",
+  "name":"Launch",
+  "program":"${file}",
+  "cwd":"${workspaceFolder}",
+  "args":[],
+  "stopOnEntry":true,
+  "justmyCode":false
+}
